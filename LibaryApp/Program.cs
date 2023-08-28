@@ -8,6 +8,25 @@ namespace LibaryApp
 {
     class Program
     {
+        static void ManageAvailability(List<LibraryBook> currentList,List<LibraryBook> destinationList,int bookId)
+        {
+            foreach (LibraryBook i in currentList)
+            {
+                if (i.bookId == bookId)
+                {
+                    destinationList.Add(i);
+                    currentList.Remove(i);
+                }
+            }
+        }
+
+        static void PrintList(List<LibraryBook> inputList)
+        {
+            foreach (LibraryBook i in inputList)
+            {
+                Console.WriteLine($"Book {i.bookId}\nTitle: {i.title}\n{i.author}\n");
+            }
+        }
         static void Main(string[] args)
         {
             List<LibraryBook> libraryBooks = new List<LibraryBook>();
@@ -49,11 +68,13 @@ namespace LibaryApp
                             libraryBooks.Add(book);
                             continue;
                         //View available books
-                        case 2:                            
-                            foreach(LibraryBook i in libraryBooks)
+                        case 2:
+                            if (libraryBooks.Count() >= 1)
+                                PrintList(libraryBooks);
+                            else
                             {
-                                Console.WriteLine($"Book {i.bookId}\nTitle: {i.title}\n{i.author}\n");
-                            }                            
+                                Console.WriteLine("There are available books");
+                            }
                             continue;
                         //Borrow a book
                         case 3:
@@ -64,16 +85,7 @@ namespace LibaryApp
                                 {                                    
                                     Console.WriteLine("Enter the ID of the book you want to borrow:");
                                     bookToBeBorrowed = Convert.ToInt32(Console.ReadLine());
-                                    //Loops through list of books to find book id
-                                    foreach(LibraryBook i in libraryBooks)
-                                    {
-                                        if(i.bookId == bookToBeBorrowed)
-                                        {
-                                            //Adds the book to the borrowed list and removes it from available books
-                                            booksBorrowed.Add(i);
-                                            libraryBooks.Remove(i);
-                                        }
-                                    }                                    
+                                    ManageAvailability(libraryBooks, booksBorrowed, bookToBeBorrowed);                                  
                                 }
                                 catch
                                 {
@@ -90,14 +102,7 @@ namespace LibaryApp
                                 {
                                     Console.WriteLine("Enter the ID of the book you want to return:");
                                     bookToBeReturned = Convert.ToInt32(Console.ReadLine());
-                                    foreach (LibraryBook i in booksBorrowed)
-                                    {
-                                        if (i.bookId == bookToBeReturned)
-                                        {
-                                            libraryBooks.Add(i);
-                                            booksBorrowed.Remove(i);                                            
-                                        }
-                                    }
+                                    ManageAvailability(booksBorrowed, libraryBooks, bookToBeReturned);
                                 }
                                 catch
                                 {
@@ -107,9 +112,11 @@ namespace LibaryApp
                             continue;
                         //View borrowed books
                         case 5:
-                            foreach (LibraryBook i in booksBorrowed)
+                            if (booksBorrowed.Count() >= 1)
+                                PrintList(booksBorrowed);
+                            else
                             {
-                                Console.WriteLine($"Book {i.bookId}\nTitle: {i.title}\n{i.author}\n");
+                                Console.WriteLine("There are no borrowed books");
                             }
                             continue;
                         //Exit the program
