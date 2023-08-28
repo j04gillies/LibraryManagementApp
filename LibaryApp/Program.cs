@@ -8,8 +8,10 @@ namespace LibaryApp
 {
     class Program
     {
+        //Method to check if the bookId is in a list, if it is it will remove it from currentList and add it to destinationList
         static void ManageAvailability(List<LibraryBook> currentList,List<LibraryBook> destinationList,int bookId)
         {
+            //checks each object in a list to see if "BookId" is in a list other wise will give the user an error message
             foreach (LibraryBook i in currentList)
             {
                 if (i.bookId == bookId)
@@ -17,11 +19,15 @@ namespace LibaryApp
                     destinationList.Add(i);
                     currentList.Remove(i);
                 }
+                else
+                {
+                    Console.WriteLine("This is not a valid book");
+                }
             }
         }
-
+        //Method to loop through all objects in a list and print them to the console
         static void PrintList(List<LibraryBook> inputList)
-        {
+        {            
             foreach (LibraryBook i in inputList)
             {
                 Console.WriteLine($"Book {i.bookId}\nTitle: {i.title}\n{i.author}\n");
@@ -121,9 +127,9 @@ namespace LibaryApp
                             continue;
                         //Exit the program
                         case 6:
+                            mainMenu = false;
                             break;
                     }
-                    break;
                 }
                 catch
                 {
